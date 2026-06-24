@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SimulationState {
 
- LaunchMode get currentMode; LaunchStage get currentStage; List<ChecklistItem> get checklists;
+ LaunchMode get currentMode; LaunchStage get currentStage; List<ChecklistItem> get checklists; bool get isFailed; String? get failureMessage; String? get failedChecklistId;
 /// Create a copy of SimulationState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $SimulationStateCopyWith<SimulationState> get copyWith => _$SimulationStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SimulationState&&(identical(other.currentMode, currentMode) || other.currentMode == currentMode)&&(identical(other.currentStage, currentStage) || other.currentStage == currentStage)&&const DeepCollectionEquality().equals(other.checklists, checklists));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SimulationState&&(identical(other.currentMode, currentMode) || other.currentMode == currentMode)&&(identical(other.currentStage, currentStage) || other.currentStage == currentStage)&&const DeepCollectionEquality().equals(other.checklists, checklists)&&(identical(other.isFailed, isFailed) || other.isFailed == isFailed)&&(identical(other.failureMessage, failureMessage) || other.failureMessage == failureMessage)&&(identical(other.failedChecklistId, failedChecklistId) || other.failedChecklistId == failedChecklistId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,currentMode,currentStage,const DeepCollectionEquality().hash(checklists));
+int get hashCode => Object.hash(runtimeType,currentMode,currentStage,const DeepCollectionEquality().hash(checklists),isFailed,failureMessage,failedChecklistId);
 
 @override
 String toString() {
-  return 'SimulationState(currentMode: $currentMode, currentStage: $currentStage, checklists: $checklists)';
+  return 'SimulationState(currentMode: $currentMode, currentStage: $currentStage, checklists: $checklists, isFailed: $isFailed, failureMessage: $failureMessage, failedChecklistId: $failedChecklistId)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $SimulationStateCopyWith<$Res>  {
   factory $SimulationStateCopyWith(SimulationState value, $Res Function(SimulationState) _then) = _$SimulationStateCopyWithImpl;
 @useResult
 $Res call({
- LaunchMode currentMode, LaunchStage currentStage, List<ChecklistItem> checklists
+ LaunchMode currentMode, LaunchStage currentStage, List<ChecklistItem> checklists, bool isFailed, String? failureMessage, String? failedChecklistId
 });
 
 
@@ -65,12 +65,15 @@ class _$SimulationStateCopyWithImpl<$Res>
 
 /// Create a copy of SimulationState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? currentMode = null,Object? currentStage = null,Object? checklists = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? currentMode = null,Object? currentStage = null,Object? checklists = null,Object? isFailed = null,Object? failureMessage = freezed,Object? failedChecklistId = freezed,}) {
   return _then(_self.copyWith(
 currentMode: null == currentMode ? _self.currentMode : currentMode // ignore: cast_nullable_to_non_nullable
 as LaunchMode,currentStage: null == currentStage ? _self.currentStage : currentStage // ignore: cast_nullable_to_non_nullable
 as LaunchStage,checklists: null == checklists ? _self.checklists : checklists // ignore: cast_nullable_to_non_nullable
-as List<ChecklistItem>,
+as List<ChecklistItem>,isFailed: null == isFailed ? _self.isFailed : isFailed // ignore: cast_nullable_to_non_nullable
+as bool,failureMessage: freezed == failureMessage ? _self.failureMessage : failureMessage // ignore: cast_nullable_to_non_nullable
+as String?,failedChecklistId: freezed == failedChecklistId ? _self.failedChecklistId : failedChecklistId // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -152,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LaunchMode currentMode,  LaunchStage currentStage,  List<ChecklistItem> checklists)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LaunchMode currentMode,  LaunchStage currentStage,  List<ChecklistItem> checklists,  bool isFailed,  String? failureMessage,  String? failedChecklistId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SimulationState() when $default != null:
-return $default(_that.currentMode,_that.currentStage,_that.checklists);case _:
+return $default(_that.currentMode,_that.currentStage,_that.checklists,_that.isFailed,_that.failureMessage,_that.failedChecklistId);case _:
   return orElse();
 
 }
@@ -173,10 +176,10 @@ return $default(_that.currentMode,_that.currentStage,_that.checklists);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LaunchMode currentMode,  LaunchStage currentStage,  List<ChecklistItem> checklists)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LaunchMode currentMode,  LaunchStage currentStage,  List<ChecklistItem> checklists,  bool isFailed,  String? failureMessage,  String? failedChecklistId)  $default,) {final _that = this;
 switch (_that) {
 case _SimulationState():
-return $default(_that.currentMode,_that.currentStage,_that.checklists);}
+return $default(_that.currentMode,_that.currentStage,_that.checklists,_that.isFailed,_that.failureMessage,_that.failedChecklistId);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -190,10 +193,10 @@ return $default(_that.currentMode,_that.currentStage,_that.checklists);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LaunchMode currentMode,  LaunchStage currentStage,  List<ChecklistItem> checklists)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LaunchMode currentMode,  LaunchStage currentStage,  List<ChecklistItem> checklists,  bool isFailed,  String? failureMessage,  String? failedChecklistId)?  $default,) {final _that = this;
 switch (_that) {
 case _SimulationState() when $default != null:
-return $default(_that.currentMode,_that.currentStage,_that.checklists);case _:
+return $default(_that.currentMode,_that.currentStage,_that.checklists,_that.isFailed,_that.failureMessage,_that.failedChecklistId);case _:
   return null;
 
 }
@@ -205,7 +208,7 @@ return $default(_that.currentMode,_that.currentStage,_that.checklists);case _:
 @JsonSerializable()
 
 class _SimulationState implements SimulationState {
-  const _SimulationState({this.currentMode = LaunchMode.full, this.currentStage = LaunchStage.rollout, final  List<ChecklistItem> checklists = const []}): _checklists = checklists;
+  const _SimulationState({this.currentMode = LaunchMode.full, this.currentStage = LaunchStage.rollout, final  List<ChecklistItem> checklists = const [], this.isFailed = false, this.failureMessage, this.failedChecklistId}): _checklists = checklists;
   factory _SimulationState.fromJson(Map<String, dynamic> json) => _$SimulationStateFromJson(json);
 
 @override@JsonKey() final  LaunchMode currentMode;
@@ -217,6 +220,9 @@ class _SimulationState implements SimulationState {
   return EqualUnmodifiableListView(_checklists);
 }
 
+@override@JsonKey() final  bool isFailed;
+@override final  String? failureMessage;
+@override final  String? failedChecklistId;
 
 /// Create a copy of SimulationState
 /// with the given fields replaced by the non-null parameter values.
@@ -231,16 +237,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SimulationState&&(identical(other.currentMode, currentMode) || other.currentMode == currentMode)&&(identical(other.currentStage, currentStage) || other.currentStage == currentStage)&&const DeepCollectionEquality().equals(other._checklists, _checklists));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SimulationState&&(identical(other.currentMode, currentMode) || other.currentMode == currentMode)&&(identical(other.currentStage, currentStage) || other.currentStage == currentStage)&&const DeepCollectionEquality().equals(other._checklists, _checklists)&&(identical(other.isFailed, isFailed) || other.isFailed == isFailed)&&(identical(other.failureMessage, failureMessage) || other.failureMessage == failureMessage)&&(identical(other.failedChecklistId, failedChecklistId) || other.failedChecklistId == failedChecklistId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,currentMode,currentStage,const DeepCollectionEquality().hash(_checklists));
+int get hashCode => Object.hash(runtimeType,currentMode,currentStage,const DeepCollectionEquality().hash(_checklists),isFailed,failureMessage,failedChecklistId);
 
 @override
 String toString() {
-  return 'SimulationState(currentMode: $currentMode, currentStage: $currentStage, checklists: $checklists)';
+  return 'SimulationState(currentMode: $currentMode, currentStage: $currentStage, checklists: $checklists, isFailed: $isFailed, failureMessage: $failureMessage, failedChecklistId: $failedChecklistId)';
 }
 
 
@@ -251,7 +257,7 @@ abstract mixin class _$SimulationStateCopyWith<$Res> implements $SimulationState
   factory _$SimulationStateCopyWith(_SimulationState value, $Res Function(_SimulationState) _then) = __$SimulationStateCopyWithImpl;
 @override @useResult
 $Res call({
- LaunchMode currentMode, LaunchStage currentStage, List<ChecklistItem> checklists
+ LaunchMode currentMode, LaunchStage currentStage, List<ChecklistItem> checklists, bool isFailed, String? failureMessage, String? failedChecklistId
 });
 
 
@@ -268,12 +274,15 @@ class __$SimulationStateCopyWithImpl<$Res>
 
 /// Create a copy of SimulationState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? currentMode = null,Object? currentStage = null,Object? checklists = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? currentMode = null,Object? currentStage = null,Object? checklists = null,Object? isFailed = null,Object? failureMessage = freezed,Object? failedChecklistId = freezed,}) {
   return _then(_SimulationState(
 currentMode: null == currentMode ? _self.currentMode : currentMode // ignore: cast_nullable_to_non_nullable
 as LaunchMode,currentStage: null == currentStage ? _self.currentStage : currentStage // ignore: cast_nullable_to_non_nullable
 as LaunchStage,checklists: null == checklists ? _self._checklists : checklists // ignore: cast_nullable_to_non_nullable
-as List<ChecklistItem>,
+as List<ChecklistItem>,isFailed: null == isFailed ? _self.isFailed : isFailed // ignore: cast_nullable_to_non_nullable
+as bool,failureMessage: freezed == failureMessage ? _self.failureMessage : failureMessage // ignore: cast_nullable_to_non_nullable
+as String?,failedChecklistId: freezed == failedChecklistId ? _self.failedChecklistId : failedChecklistId // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

@@ -12,6 +12,9 @@ sealed class SimulationState with _$SimulationState {
     @Default(LaunchMode.full) LaunchMode currentMode,
     @Default(LaunchStage.rollout) LaunchStage currentStage,
     @Default([]) List<ChecklistItem> checklists,
+    @Default(false) bool isFailed,
+    String? failureMessage,
+    String? failedChecklistId,
   }) = _SimulationState;
 
   factory SimulationState.fromJson(Map<String, Object?> json) =>

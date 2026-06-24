@@ -31,6 +31,17 @@ class _LaunchSimulatorScreenState extends ConsumerState<LaunchSimulatorScreen> {
       if (previous?.currentStage != next.currentStage) {
         _game.updateSimulationStage(next.currentStage);
       }
+      
+      if (previous?.isFailed != true && next.isFailed == true) {
+        // Trigger game animation
+        _game.triggerFailure(next.failedChecklistId);
+        
+        // Wait briefly before showing dialog so animation plays
+        Future.delayed(const Duration(seconds: 2), () {
+          if (!mounted) return;
+          _showFailureModal(next.failureMessage);
+        });
+      }
     });
 
     return Scaffold(
@@ -61,6 +72,33 @@ class _LaunchSimulatorScreenState extends ConsumerState<LaunchSimulatorScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  void _showFailureModal(String? message) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.red.shade900,
+          title: const Text('MISSION FAILED', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24)),
+          content: Text(message ?? '알 수 없는 오류 발생', style: const TextStyle(color: Colors.white, fontSize: 16)),
+          actions: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.red.shade900),
+              onPressed: () {
+                Navigator.of(context).pop();
+                ref.read(simulationProvider.notifier).retryCheckpoint();
+                // We also need to tell the game to reset visually
+                final currentState = ref.read(simulationProvider);
+                _game.resetToStage(currentState.currentStage);
+              },
+              child: const Text('RETRY (체크포인트 복구)'),
+            ),
+          ],
+        );
+      },
     );
   }
 

@@ -16,6 +16,8 @@ class ChecklistPanel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(simulationProvider);
+    final isFailed = state.isFailed;
     final stageItems = checklists.where((item) => item.targetStage == currentStage).toList();
 
     return Padding(
@@ -45,7 +47,7 @@ class ChecklistPanel extends ConsumerWidget {
               itemCount: stageItems.length,
               itemBuilder: (context, index) {
                 final item = stageItems[index];
-                return _ChecklistItemTile(item: item);
+                return _ChecklistItemTile(item: item, isFailed: isFailed);
               },
             ),
           ),
@@ -57,8 +59,9 @@ class ChecklistPanel extends ConsumerWidget {
 
 class _ChecklistItemTile extends ConsumerWidget {
   final ChecklistItem item;
+  final bool isFailed;
 
-  const _ChecklistItemTile({required this.item});
+  const _ChecklistItemTile({required this.item, required this.isFailed});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -71,22 +74,48 @@ class _ChecklistItemTile extends ConsumerWidget {
           color: item.isCompleted ? Colors.green : Colors.white24,
         ),
       ),
-      child: ListTile(
-        leading: Icon(
-          item.isCompleted ? Icons.check_circle : Icons.radio_button_unchecked,
-          color: item.isCompleted ? Colors.green : Colors.white54,
-        ),
-        title: Text(
-          item.description,
-          style: TextStyle(
-            color: item.isCompleted ? Colors.green.shade200 : Colors.white,
-            decoration: item.isCompleted ? TextDecoration.lineThrough : null,
-            fontSize: 14,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ListTile(
+            leading: Icon(
+              item.isCompleted ? Icons.check_circle : Icons.radio_button_unchecked,
+              color: item.isCompleted ? Colors.green : Colors.white54,
+            ),
+            title: Text(
+              item.description,
+              style: TextStyle(
+                color: item.isCompleted ? Colors.green.shade200 : Colors.white,
+                decoration: item.isCompleted ? TextDecoration.lineThrough : null,
+                fontSize: 14,
+              ),
+            ),
+            onTap: item.choices.isEmpty && !item.isCompleted && !isFailed
+                ? () => ref.read(simulationProvider.notifier).toggleChecklistItem(item.id)
+                : null,
           ),
-        ),
-        onTap: () {
-          ref.read(simulationProvider.notifier).toggleChecklistItem(item.id);
-        },
+          if (!item.isCompleted && item.choices.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(left: 56.0, right: 16.0, bottom: 16.0),
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: List.generate(item.choices.length, (index) {
+                  final choice = item.choices[index];
+                  return ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueGrey.shade800,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: isFailed
+                        ? null
+                        : () => ref.read(simulationProvider.notifier).selectChoice(item.id, index),
+                    child: Text(choice.label),
+                  );
+                }),
+              ),
+            ),
+        ],
       ),
     );
   }

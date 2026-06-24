@@ -19,6 +19,9 @@ _SimulationState _$SimulationStateFromJson(Map<String, dynamic> json) =>
               ?.map((e) => ChecklistItem.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      isFailed: json['isFailed'] as bool? ?? false,
+      failureMessage: json['failureMessage'] as String?,
+      failedChecklistId: json['failedChecklistId'] as String?,
     );
 
 Map<String, dynamic> _$SimulationStateToJson(_SimulationState instance) =>
@@ -26,6 +29,9 @@ Map<String, dynamic> _$SimulationStateToJson(_SimulationState instance) =>
       'currentMode': _$LaunchModeEnumMap[instance.currentMode]!,
       'currentStage': _$LaunchStageEnumMap[instance.currentStage]!,
       'checklists': instance.checklists,
+      'isFailed': instance.isFailed,
+      'failureMessage': instance.failureMessage,
+      'failedChecklistId': instance.failedChecklistId,
     };
 
 const _$LaunchModeEnumMap = {
